@@ -12,13 +12,12 @@ def convert_price_to_score(price):
 
 def convert_img_to_price(path):
     '''
-    Takes an img path as argument and returns a tuple (TicketPrice, Score)
+    Takes an img path as argument and returns a list of tuples (TicketPrice, Score)
     If path is invalid, throws an OSError
     '''
     # Use tesseract to write the OCR'd content to a tempfile
     tfile = tempfile.NamedTemporaryFile(delete=False)
     tname = tfile.name
-    print tname
     tfile.close()
     try:
         subprocess.call(["tesseract", path, tname])
