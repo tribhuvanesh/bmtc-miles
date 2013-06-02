@@ -1,0 +1,106 @@
+body {
+    text-align: center;
+}
+
+.header {
+    padding: 3em 0 2em 0;
+    min-height: 80px;
+    color: #333;
+}
+
+.header h1 {
+    margin: 0.2em 0;
+    font-size: 2.8em;
+    font-weight: 300;
+    letter-spacing: -1px;
+}
+
+.header h2 {
+    font-weight: 300;
+    margin: 0;
+    color: #ccc;
+}
+
+.leaderboard {
+    font-size: 1.4em;
+    margin: 0 auto;
+    padding: 1em 0;
+    width: 60%;
+}
+
+.leader {
+    border-bottom: 1px solid #eee;
+    padding: 1em 0;
+    text-align: left;
+}
+
+.leader-name {
+    color: #3b8bba;
+    cursor: pointer;
+    font-weight: 300;
+    text-decoration: none;
+}
+
+.leader-miles {
+    text-align: right;
+}
+
+.tickets {
+    display: none;
+    padding: 2em 0 1em 0;
+}
+
+.ticket-image img {
+    border: 3px solid #111;
+}
+
+.ticket-miles {
+    text-align: right;
+}
+
+.top {
+    font-weight: 600;
+}
+
+.buzz-chart {
+    border-bottom: 1px solid #eee;
+    padding: 2em 0;
+}
+
+.not-trending {
+    color: rgb(202, 60, 60); 
+    font-weight: 500;
+}
+
+.mildly-trending {
+    color: rgb(255,156, 31);
+    font-weight: 500;
+}
+
+.highly-trending {
+    color: rgb(62, 165, 57);
+    font-weight: 500;
+}
+
+.buzz-down {
+    color: #dd514c;
+    font-weight: 500;
+}
+
+.buzz-down:after {
+    content: '↓';
+}
+
+.buzz-up {
+    color: #61B842;
+    font-weight: 500;
+}
+
+.buzz-up:after {
+    content: '↑';
+}
+
+.pure-button-success {
+    background: rgb(76, 201, 71); /* this is a green */
+    color: #fff;
+}

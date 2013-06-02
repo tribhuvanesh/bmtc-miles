@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Track This Trend: Tracking {{query}}</title>
+        <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.1.0/pure-min.css">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}"/>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/Chart.js') }}"></script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                //var SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+                var plotData = {{ plotData|tojson|safe }};
+                console.log(plotData);
+                var ctx = $("#line-chart").get(0).getContext("2d");
+                var myNewChart = new Chart(ctx);
+
+                var scaleOverride = {{ scaleOverride|safe }};
+ 
+                var options = {
+                                'scaleOverride': false,
+                                'scaleSteps': 10,
+                                'scaleStepWidth': 0.01,
+                                'scaleStartValue': 0,
+				'pointDot': false
+                              };
+
+                new Chart(ctx).Line(plotData, options);
+            });
+        </script>
+    </head>
+    <body>
+        <div class="pure-g-r">
+            <div class="header pure-u-1">
+                <h1 class="pure-u-1">{{query}} is <span class="{{trendLevel}}">{{trendMessage}}</span> now</h1>
+                <h2 class="pure-u">Changed <span class="{{buzzDirection}}">{{percentChange}}%</span> in the last 12 hours</h2>
+            </div>
+            <div class="buzz-chart pure-u-1">
+                <canvas id="line-chart" width="700" height="200"></canvas>
+            </div>
+            <div class="search-box pure-u-1">
+                <form class="pure-form" action="/track/" method="post">
+                    <input class="pure-input-1-3" type="text" placeholder="Your Query Here" name="query" value="{{query}}" required>
+                    <button type="submit" class="pure-button pure-button-success">Track</button>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>
