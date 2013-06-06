@@ -14,6 +14,7 @@ CWD = os.getcwd()
 UPLOAD_DIR = CWD + "/uploads/"
 
 app = Flask(__name__)
+app.debug = True
 
 @app.route('/tickets/<username>/')
 def panels(username):
