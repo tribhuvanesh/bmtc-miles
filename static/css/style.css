@@ -13,7 +13,7 @@ a:visited {
 }
 
 .header {
-    padding: 4em 0;
+    padding: 4.5em 0;
     min-height: 80px;
     color: #333;
 }
@@ -46,13 +46,18 @@ a:visited {
 .footer {
     color: #999;
     font-size: 0.8em;
-    padding: 2em;
+    padding: 2em 0 0 0;
+}
+
+.credits {
+    color: #999;
+    font-size: 0.7em;
 }
 
 .leaderboard {
     font-size: 1.4em;
     margin: 0 auto;
-    padding: 1em 0;
+    padding: 0 0 1em 0;
     width: 60%;
 }
 
