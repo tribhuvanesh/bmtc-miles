@@ -51,8 +51,8 @@ def upload(username, filename):
 
 @app.route('/ocr/', methods=['POST'])
 def ocr():
-    if (not os.path.isdir('uploads')):
-        os.mkdir('uploads')
+    if (not os.path.isdir(UPLOAD_DIR)):
+        os.mkdir(UPLOAD_DIR)
     file = request.files['file']
 
     if file:
@@ -112,7 +112,10 @@ def home():
 
 @app.route('/leaders/')
 def leaders():
-    users = [user for user in os.listdir(UPLOAD_DIR) if os.path.isdir(UPLOAD_DIR + user)]
+    try:
+        users = [user for user in os.listdir(UPLOAD_DIR) if os.path.isdir(UPLOAD_DIR + user)]
+    except OSError:
+        return render_template('leaders.html')
     
     leaders = []
     for user in users:

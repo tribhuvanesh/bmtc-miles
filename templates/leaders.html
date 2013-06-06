@@ -23,6 +23,9 @@
             </div>
 
             <div class="leaderboard pure-g-r">
+                {% if not leaders is defined %}
+                <div class="pure-u-1"><p>No tickets uploaded yet</p></div>
+                {% endif %}
                 {% for leader in leaders %}
                 <div class="leader">
                     <div class="pure-u-1-2 leader-name">@{{ leader.username }}</div>
