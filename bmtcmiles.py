@@ -76,6 +76,7 @@ def ocr():
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
+    """
     return '''
     <!doctype html>
     <title>Upload new File</title>
@@ -86,6 +87,8 @@ def home():
         <input type=submit value=Upload>
     </form>
     '''
+    """
+    return render_template('index.html')
 
 @app.route('/leaders/')
 def leaders():

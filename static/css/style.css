@@ -2,8 +2,18 @@ body {
     text-align: center;
 }
 
+a {
+    color: #3b8bba;
+    text-decoration: none;
+}
+
+a:visited {
+    color: #3b8bba;
+    text-decoration: none;
+}
+
 .header {
-    padding: 3em 0 2em 0;
+    padding: 4em 0;
     min-height: 80px;
     color: #333;
 }
@@ -19,6 +29,24 @@ body {
     font-weight: 300;
     margin: 0;
     color: #ccc;
+}
+
+#file {
+    padding-top: 3px;
+}
+
+#file input {
+    height: 29.78125px;
+}
+
+.go-to-leaders {
+    padding: 1em;
+}
+
+.footer {
+    color: #999;
+    font-size: 0.8em;
+    padding: 2em;
 }
 
 .leaderboard {
@@ -60,47 +88,4 @@ body {
 
 .top {
     font-weight: 600;
-}
-
-.buzz-chart {
-    border-bottom: 1px solid #eee;
-    padding: 2em 0;
-}
-
-.not-trending {
-    color: rgb(202, 60, 60); 
-    font-weight: 500;
-}
-
-.mildly-trending {
-    color: rgb(255,156, 31);
-    font-weight: 500;
-}
-
-.highly-trending {
-    color: rgb(62, 165, 57);
-    font-weight: 500;
-}
-
-.buzz-down {
-    color: #dd514c;
-    font-weight: 500;
-}
-
-.buzz-down:after {
-    content: '↓';
-}
-
-.buzz-up {
-    color: #61B842;
-    font-weight: 500;
-}
-
-.buzz-up:after {
-    content: '↑';
-}
-
-.pure-button-success {
-    background: rgb(76, 201, 71); /* this is a green */
-    color: #fff;
 }
