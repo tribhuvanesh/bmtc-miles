@@ -62,11 +62,15 @@ def ocr():
         filepath = UPLOAD_DIR + username +  "/"
         fullfilename = filepath + filename
  
+        print "Making dir:", filepath
         if (not os.path.isdir(filepath)):
             os.mkdir(filepath)
+        print "Saving file:", os.path.join(filepath, filename)
         file.save(os.path.join(filepath, filename))
 
+        print "OCR start"
         ocrScores = convert_img_to_price(os.path.join(filepath, filename))
+        print "OCR end"
         validScores = sorted(filter( lambda x: x[0] < 200.0, ocrScores), key=lambda k: k[1], reverse=True)
         selectedScore = int(validScores[0][0]) if len(validScores) > 0 else 0
 
