@@ -5,6 +5,7 @@ import tempfile
 import subprocess
 import re
 import sys
+from PIL import Image
 
 from flask import Flask, request, redirect, send_from_directory, url_for, render_template
 from werkzeug import secure_filename
@@ -73,6 +74,20 @@ def ocr():
         print "OCR end"
         validScores = sorted(filter( lambda x: x[0] < 200.0, ocrScores), key=lambda k: k[1], reverse=True)
         selectedScore = int(validScores[0][0]) if len(validScores) > 0 else 0
+
+        # Resize image to reduce bandwidth on page load
+        ticketImage = Image.open(os.path.join(filepath, filename))
+        ticketWidth = ticketImage.size[0]
+        ticketHeight = ticketImage.size[1]
+
+        print "Size", ticketWidth, ticketHeight
+        if (ticketWidth > 200):
+            reductionFactor = 200.0 / ticketWidth * 2
+            ticketWidth = int(ticketWidth * reductionFactor)
+            ticketHeight = int(ticketHeight * reductionFactor)
+            print "New size", ticketWidth, ticketHeight
+            ticketImage = ticketImage.resize((ticketWidth, ticketHeight), Image.ANTIALIAS)
+            ticketImage.save(os.path.join(filepath, filename))
 
         os.rename(os.path.join(filepath, filename), os.path.join(filepath, str(selectedScore) + '-' + str(timestamp) + '.jpg'))
 
