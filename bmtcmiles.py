@@ -47,39 +47,40 @@ def upload(username, filename):
     response = dict(username=username, numpanels=numpanels)
     return json.dumps(response)
 
+@app.route('/ocr/', methods=['POST'])
+def ocr():
+    if (not os.path.isdir('uploads')):
+        os.mkdir('uploads')
+    file = request.files['file']
+
+    if file:
+        filename = secure_filename(file.filename)
+        timestamp = int(datetime.datetime.now().strftime("%s"))
+        username = request.form['username']
+        print "Got image from user:", username
+
+        filepath = UPLOAD_DIR + username +  "/"
+        fullfilename = filepath + filename
+ 
+        if (not os.path.isdir(filepath)):
+            os.mkdir(filepath)
+        file.save(os.path.join(filepath, filename))
+
+        ocrScores = convert_img_to_price(os.path.join(filepath, filename))
+        validScores = sorted(filter( lambda x: x[0] < 200.0, ocrScores), key=lambda k: k[1], reverse=True)
+        selectedScore = int(validScores[0][0]) if len(validScores) > 0 else 0
+
+        os.rename(os.path.join(filepath, filename), os.path.join(filepath, str(selectedScore) + '-' + str(timestamp) + '.jpg'))
+
+    return redirect(url_for('leaders'))
+
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    if request.method == 'POST':
-        if (not os.path.isdir('uploads')):
-            os.mkdir('uploads')
-        file = request.files['file']
-        if file:
-            filename = secure_filename(file.filename)
-            timestamp = int(datetime.datetime.now().strftime("%s"))
-            username = request.form['username']
-            print "Got image from user:", username
-
-            filepath = UPLOAD_DIR + username +  "/"
-            fullfilename = filepath + filename
-            
-            if (not os.path.isdir(filepath)):
-                os.mkdir(filepath)
-            file.save(os.path.join(filepath, filename))
-
-            ocrScores = convert_img_to_price(os.path.join(filepath, filename))
-            validScores = sorted(filter( lambda x: x[0] < 200.0, ocrScores), key=lambda k: k[1], reverse=True)
-            selectedScore = int(validScores[0][0]) if len(validScores) > 0 else 0
-            #print "ocrScores: " + ocrScores + " validScores: " + validScores + "selectedScore: " + selectedScore
-
-            os.rename(os.path.join(filepath, filename), os.path.join(filepath, str(selectedScore) + '-' + str(timestamp) + '.jpg'))
-
-            return redirect(url_for('upload',
-                                    username=username, filename=filename))
     return '''
     <!doctype html>
     <title>Upload new File</title>
     <h1>Upload new File</h1>
-    <form action="" method=post enctype=multipart/form-data>
+    <form action="/ocr/" method=post enctype=multipart/form-data>
         <input type=file name=file>
         <input type=text name=username value=username>
         <input type=submit value=Upload>
