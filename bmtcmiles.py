@@ -5,6 +5,7 @@ import tempfile
 import subprocess
 import re
 import sys
+from PIL import Image
 
 from flask import Flask, request, redirect, send_from_directory, url_for, render_template
 from werkzeug import secure_filename
@@ -13,6 +14,7 @@ CWD = os.getcwd()
 UPLOAD_DIR = CWD + "/uploads/"
 
 app = Flask(__name__)
+app.debug = True
 
 @app.route('/tickets/<username>/')
 def panels(username):
@@ -47,48 +49,73 @@ def upload(username, filename):
     response = dict(username=username, numpanels=numpanels)
     return json.dumps(response)
 
+@app.route('/ocr/', methods=['POST'])
+def ocr():
+    if (not os.path.isdir(UPLOAD_DIR)):
+        os.mkdir(UPLOAD_DIR)
+    file = request.files['file']
+
+    if file:
+        filename = secure_filename(file.filename)
+        timestamp = int(datetime.datetime.now().strftime("%s"))
+        username = request.form['username']
+        print "Got image from user:", username
+
+        filepath = UPLOAD_DIR + username +  "/"
+        fullfilename = filepath + filename
+ 
+        print "Making dir:", filepath
+        if (not os.path.isdir(filepath)):
+            os.mkdir(filepath)
+        print "Saving file:", os.path.join(filepath, filename)
+        file.save(os.path.join(filepath, filename))
+
+        print "OCR start"
+        ocrScores = convert_img_to_price(os.path.join(filepath, filename))
+        print "OCR end"
+        validScores = sorted(filter( lambda x: x[0] < 200.0, ocrScores), key=lambda k: k[1], reverse=True)
+        selectedScore = int(validScores[0][0]) if len(validScores) > 0 else 0
+
+        # Resize image to reduce bandwidth on page load
+        ticketImage = Image.open(os.path.join(filepath, filename))
+        ticketWidth = ticketImage.size[0]
+        ticketHeight = ticketImage.size[1]
+
+        print "Size", ticketWidth, ticketHeight
+        if (ticketWidth > 200):
+            reductionFactor = 200.0 / ticketWidth * 2
+            ticketWidth = int(ticketWidth * reductionFactor)
+            ticketHeight = int(ticketHeight * reductionFactor)
+            print "New size", ticketWidth, ticketHeight
+            ticketImage = ticketImage.resize((ticketWidth, ticketHeight), Image.ANTIALIAS)
+            ticketImage.save(os.path.join(filepath, filename))
+
+        os.rename(os.path.join(filepath, filename), os.path.join(filepath, str(selectedScore) + '-' + str(timestamp) + '.jpg'))
+
+    return redirect(url_for('leaders'))
+
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    if request.method == 'POST':
-        if (not os.path.isdir('uploads')):
-            os.mkdir('uploads')
-        file = request.files['file']
-        if file:
-            filename = secure_filename(file.filename)
-            timestamp = int(datetime.datetime.now().strftime("%s"))
-            username = request.form['username']
-            print "Got image from user:", username
-
-            filepath = UPLOAD_DIR + username +  "/"
-            fullfilename = filepath + filename
-            
-            if (not os.path.isdir(filepath)):
-                os.mkdir(filepath)
-            file.save(os.path.join(filepath, filename))
-
-            ocrScores = convert_img_to_price(os.path.join(filepath, filename))
-            validScores = sorted(filter( lambda x: x[0] < 200.0, ocrScores), key=lambda k: k[1], reverse=True)
-            selectedScore = int(validScores[0][0]) if len(validScores) > 0 else 0
-            #print "ocrScores: " + ocrScores + " validScores: " + validScores + "selectedScore: " + selectedScore
-
-            os.rename(os.path.join(filepath, filename), os.path.join(filepath, str(selectedScore) + '-' + str(timestamp) + '.jpg'))
-
-            return redirect(url_for('upload',
-                                    username=username, filename=filename))
+    """
     return '''
     <!doctype html>
     <title>Upload new File</title>
     <h1>Upload new File</h1>
-    <form action="" method=post enctype=multipart/form-data>
+    <form action="/ocr/" method=post enctype=multipart/form-data>
         <input type=file name=file>
         <input type=text name=username value=username>
         <input type=submit value=Upload>
     </form>
     '''
+    """
+    return render_template('index.html')
 
 @app.route('/leaders/')
 def leaders():
-    users = [user for user in os.listdir(UPLOAD_DIR) if os.path.isdir(UPLOAD_DIR + user)]
+    try:
+        users = [user for user in os.listdir(UPLOAD_DIR) if os.path.isdir(UPLOAD_DIR + user)]
+    except OSError:
+        return render_template('leaders.html')
     
     leaders = []
     for user in users:

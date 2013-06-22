@@ -23,6 +23,9 @@
             </div>
 
             <div class="leaderboard pure-g-r">
+                {% if not leaders is defined %}
+                <div class="pure-u-1"><p>No tickets uploaded yet</p></div>
+                {% endif %}
                 {% for leader in leaders %}
                 <div class="leader">
                     <div class="pure-u-1-2 leader-name">@{{ leader.username }}</div>
@@ -38,6 +41,18 @@
                 </div>    
                 {% endfor %}
             </div>
+
+            <div class="go-to-leaders pure-u-1">
+                <p><a href="/">&larr; Go back</a> and upload another ticket</p>
+            </div>
+
+            <div class="footer pure-u-1">
+                <p>Built for Kindness <a href="http://simpletechlife.in/rhokblr/">@rhok_bang</a>&nbsp;&nbsp;|&nbsp;&nbsp;Code on <a href="https://github.com/emaadmanzoor/bmtc-miles/">Github</a></p>
+            </div>
+          
+            <div class="credits pure-u-1">
+                <p><a href="https://github.com/racheesingh">@racheesingh</a>, <a href="https://github.com/tribhuvanesh">@tribhuvanesh</a> and <a href="https://github.com/emaadmanzoor">@emaadmanzoor</a></p>
+            </div>  
         </div>
     </body>
 </html>

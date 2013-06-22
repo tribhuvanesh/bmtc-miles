@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>BMTC Miles | RHoK 2013</title>
+        <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.1.0/pure-min.css">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}"/>
+    </head>
+    <body>
+        <div class="pure-g-r">
+
+            <div class="header pure-u-1">
+                <h1 class="pure-u-1">BMTC Miles</h1>
+                <h2 class="pure-u">A Public Transport Leaderboard</h2>
+            </div>
+
+            <div class="search-box pure-u-1">
+                <form class="pure-form" action="/ocr/" method=post enctype=multipart/form-data>
+                    <input class="pure-input-1-4" type="text" name="username" placeholder="Username"/ required>
+                    <div class="pure-u-1-8" id="file">
+                        <input class="pure-input-1" type="file" name="file" placeholder="Upload A Ticket"/ required>
+                    </div>
+                    <button type="submit" id="upload" class="pure-button pure-button-primary">Upload A Ticket</button>
+                </form>
+            </div> 
+
+            <div class="go-to-leaders pure-u-1">
+                <p>Or take a look at the <a href="/leaders/">leaderboard&rarr;</a></p>
+            </div>
+
+            <div class="footer pure-u-1">
+                <p>Built for Kindness at <a href="http://simpletechlife.in/rhokblr/">@rhok_bang</a> 2013&nbsp;&nbsp;|&nbsp;&nbsp;Code on <a href="https://github.com/emaadmanzoor/bmtc-miles/">Github</a></p>
+            </div>
+
+            <div class="credits pure-u-1">
+                <p><a href="https://github.com/racheesingh">@racheesingh</a>, <a href="https://github.com/tribhuvanesh">@tribhuvanesh</a> and <a href="https://github.com/emaadmanzoor">@emaadmanzoor</a></p>
+            </div>
+
+        </div>
+    </body>
+</html>
